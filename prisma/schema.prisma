@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  projects  Project[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  isFavorite  Boolean  @default(false)
+
+  // Overview
+  description String?  @db.Text
+  problem     String?  @db.Text
+  solution    String?  @db.Text
+  techStack   String[]
+
+  // Features
+  features    Json?
+
+  // Architecture
+  erDiagram    String? @db.Text
+  systemDesign String? @db.Text
+  flowcharts   String? @db.Text
+
+  // Setup
+  installation  String? @db.Text
+  envVariables  String? @db.Text
+  apiNotes      String? @db.Text
+
+  // Documentation
+  documentation String? @db.Text
+
+  // Resources
+  githubUrl String?
+  liveUrl   String?
+  links     Json?
+
+  // Dev Notes
+  challenges          String? @db.Text
+  learnings           String? @db.Text
+  futureImprovements  String? @db.Text
+
+  // Interview Notes
+  hrExplanation         String? @db.Text
+  technicalExplanation  String? @db.Text
+  commonQuestions       Json?
+  explanation30s        String? @db.Text
+  explanation2m         String? @db.Text
+
+  // Meta
+  aiGeneratedFields String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  files        ProjectFile[]
+  chatHistory  ChatHistory[]
+
+  @@index([userId])
+}
+
+model ProjectFile {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  url       String
+  type      String   // "image" | "pdf"
+  filename  String
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model ChatHistory {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  role      String   // "user" | "assistant"
+  content   String   @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
