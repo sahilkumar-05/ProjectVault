@@ -10,6 +10,7 @@ type Project = {
   description: string | null;
   techStack: string[];
   isFavorite: boolean;
+  healthPercentage: number;
 };
 
 export default function ProjectCard({ project }: { project: Project }) {
@@ -46,12 +47,16 @@ export default function ProjectCard({ project }: { project: Project }) {
       <Link
         href={`/projects/${project.id}/overview`}
         style={{
-          background: "#fff",
-          border: "0.5px solid #E4DFD2",
-          borderRadius: "12px",
-          padding: "16px",
+          background: "rgba(255,255,255,0.55)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          border: "1px solid rgba(255,255,255,0.6)",
+          borderRadius: "16px",
+          padding: "18px",
           textDecoration: "none",
           display: "block",
+          boxShadow: "0 4px 24px rgba(44,44,42,0.06)",
+          transition: "transform 0.15s ease, box-shadow 0.15s ease",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
@@ -96,6 +101,10 @@ export default function ProjectCard({ project }: { project: Project }) {
             </span>
           ))}
         </div>
+        <div style={{ height: "4px", background: "#EEEDFE", borderRadius: "2px", overflow: "hidden", marginTop: "10px" }}>
+          <div style={{ width: `${project.healthPercentage}%`, height: "100%", background: "linear-gradient(90deg, #D85A30, #F0997B)" }} />
+        </div>
+        <p style={{ fontSize: "11px", color: "#888780", marginTop: "4px" }}>{project.healthPercentage}% documented</p>
       </Link>
 
       {showConfirm && (

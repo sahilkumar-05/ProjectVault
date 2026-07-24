@@ -1,6 +1,9 @@
 import { auth } from "@/lib/auth";
+import HealthScore from "@/components/project/HealthScore";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import AIGenerator from "@/components/project/AIGenerator";
+
 import ProjectTabs from "@/components/project/ProjectTabs";
 
 export default async function ProjectLayout({
@@ -29,6 +32,8 @@ export default async function ProjectLayout({
           <p style={{ fontSize: "13px", color: "#888780" }}>{project.description}</p>
         )}
       </div>
+        <HealthScore project={project} />
+      <AIGenerator project={project} />
 
       <ProjectTabs projectId={id} />
 

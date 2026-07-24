@@ -4,7 +4,11 @@ import { useProject } from "@/hooks/useProject";
 
 export default function DocumentationPage() {
   const { project, setProject, saving, saved, save, loading } = useProject();
-  if (loading || !project) return <p style={{ color: "#888780", fontSize: "13px" }}>Loading...</p>;
+  if (loading || !project) {
+    return (
+      <div style={{ height: "120px", background: "#FAF7F0", borderRadius: "8px", animation: "pulse 1.5s ease-in-out infinite" }} />
+    );
+  }
 
   return (
     <div>

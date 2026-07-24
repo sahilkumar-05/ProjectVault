@@ -2,6 +2,16 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import ProjectCard from "@/components/dashboard/ProjectCard";
+import { getHealthScore } from "@/lib/health-score";
+
+const glassCard: React.CSSProperties = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(14px)",
+  WebkitBackdropFilter: "blur(14px)",
+  border: "1px solid rgba(255,255,255,0.6)",
+  borderRadius: "16px",
+  boxShadow: "0 4px 24px rgba(44,44,42,0.06)",
+};
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -13,58 +23,72 @@ export default async function DashboardPage() {
   });
 
   const favoritesCount = projects.filter((p) => p.isFavorite).length;
+  const avgHealth = projects.length > 0
+    ? Math.round(projects.reduce((sum, p) => sum + getHealthScore(p).percentage, 0) / projects.length)
+    : 0;
 
   return (
     <div>
-      <h1 style={{ fontSize: "22px", color: "#2C2C2A", marginBottom: "4px" }}>
+      <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#2C2C2A", marginBottom: "4px", letterSpacing: "-0.3px" }}>
         Welcome back, {session?.user?.name?.split(" ")[0]}
       </h1>
-      <p style={{ fontSize: "14px", color: "#5F5E5A", marginBottom: "24px" }}>
+      <p style={{ fontSize: "14px", color: "#888780", marginBottom: "28px" }}>
         Here's what's in your vault.
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "32px" }}>
-        <div style={{ background: "#fff", border: "0.5px solid #E4DFD2", borderRadius: "12px", padding: "16px" }}>
-          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "4px" }}>Total projects</p>
-          <p style={{ fontSize: "24px", fontWeight: 500, color: "#2C2C2A" }}>{projects.length}</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px", marginBottom: "36px" }}>
+        <div style={{ ...glassCard, padding: "18px" }}>
+          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Total projects</p>
+          <p style={{ fontSize: "28px", fontWeight: 700, color: "#2C2C2A" }}>{projects.length}</p>
         </div>
-        <div style={{ background: "#fff", border: "0.5px solid #E4DFD2", borderRadius: "12px", padding: "16px" }}>
-          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "4px" }}>Avg. documentation health</p>
-          <p style={{ fontSize: "24px", fontWeight: 500, color: "#2C2C2A" }}>—</p>
+        <div style={{ ...glassCard, padding: "18px" }}>
+          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Avg. documentation health</p>
+          <p style={{
+            fontSize: "28px", fontWeight: 700,
+            background: "linear-gradient(135deg, #D85A30, #F0997B)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>
+            {projects.length > 0 ? `${avgHealth}%` : "—"}
+          </p>
         </div>
-        <div style={{ background: "#fff", border: "0.5px solid #E4DFD2", borderRadius: "12px", padding: "16px" }}>
-          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "4px" }}>Favorites</p>
-          <p style={{ fontSize: "24px", fontWeight: 500, color: "#2C2C2A" }}>{favoritesCount}</p>
+        <div style={{ ...glassCard, padding: "18px" }}>
+          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Favorites</p>
+          <p style={{ fontSize: "28px", fontWeight: 700, color: "#EF9F27" }}>{favoritesCount}</p>
         </div>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-        <h2 style={{ fontSize: "15px", color: "#2C2C2A" }}>Your projects</h2>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#2C2C2A" }}>Your projects</h2>
         <Link
           href="/projects/new"
-          style={{ padding: "8px 16px", background: "#D85A30", color: "#fff", borderRadius: "8px", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}
+          style={{
+            padding: "9px 18px",
+            background: "linear-gradient(135deg, #D85A30, #C4471F)",
+            color: "#fff", borderRadius: "10px", fontSize: "13px", fontWeight: 500,
+            textDecoration: "none", boxShadow: "0 4px 14px rgba(216,90,48,0.3)",
+          }}
         >
           + New project
         </Link>
       </div>
 
       {projects.length === 0 ? (
-        <div style={{ background: "#fff", border: "0.5px dashed #B4B2A9", borderRadius: "12px", padding: "48px", textAlign: "center" }}>
-          <p style={{ fontSize: "15px", color: "#2C2C2A", marginBottom: "6px" }}>No projects yet</p>
-          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "16px" }}>
+        <div style={{ ...glassCard, border: "1px dashed rgba(180,178,169,0.6)", padding: "56px", textAlign: "center" }}>
+          <p style={{ fontSize: "16px", color: "#2C2C2A", marginBottom: "6px", fontWeight: 500 }}>No projects yet</p>
+          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "18px" }}>
             Create your first project to start building your developer memory.
           </p>
           <Link
             href="/projects/new"
-            style={{ padding: "8px 18px", background: "#D85A30", color: "#fff", borderRadius: "8px", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}
+            style={{ padding: "10px 20px", background: "linear-gradient(135deg, #D85A30, #C4471F)", color: "#fff", borderRadius: "10px", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}
           >
             Create project
           </Link>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px" }}>
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard key={project.id} project={{ ...project, healthPercentage: getHealthScore(project).percentage }} />
           ))}
         </div>
       )}

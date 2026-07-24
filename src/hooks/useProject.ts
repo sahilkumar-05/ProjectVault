@@ -19,14 +19,25 @@ export function useProject() {
       });
   }, [id]);
 
-  const save = async (fields: Record<string, any>) => {
+  const save = async (fields: Record<string, any>, sectionKey?: string) => {
     setSaving(true);
     setSaved(false);
+
+    const payload = { ...fields };
+    if (sectionKey && project?.aiGeneratedFields?.includes(sectionKey)) {
+      payload.aiGeneratedFields = project.aiGeneratedFields.filter((k: string) => k !== sectionKey);
+    }
+
     await fetch(`/api/projects/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fields),
+      body: JSON.stringify(payload),
     });
+
+    if (payload.aiGeneratedFields) {
+      setProject((prev: any) => ({ ...prev, aiGeneratedFields: payload.aiGeneratedFields }));
+    }
+
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

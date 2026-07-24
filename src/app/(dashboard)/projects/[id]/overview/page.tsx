@@ -42,6 +42,7 @@ export default function OverviewPage() {
         problem: project.problem,
         solution: project.solution,
         techStack: project.techStack,
+        aiGeneratedFields: (project as any).aiGeneratedFields?.filter((k: string) => k !== "overview"),
       }),
     });
 
@@ -56,6 +57,11 @@ export default function OverviewPage() {
 
   return (
     <div>
+      {(project as any).aiGeneratedFields?.includes("overview") && (
+        <div style={{ background: "#FFF4E5", border: "0.5px solid #F0997B", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", color: "#993C1D", marginBottom: "1rem" }}>
+          ✨ This content was AI-generated. Review and save to confirm.
+        </div>
+      )}
       <div style={{ marginBottom: "1rem" }}>
         <label style={{ display: "block", fontSize: "13px", marginBottom: "4px", color: "#5F5E5A" }}>
           Project name

@@ -7,7 +7,11 @@ type Feature = { title: string; description: string };
 export default function FeaturesPage() {
   const { project, setProject, saving, saved, save, loading } = useProject();
 
-  if (loading || !project) return <p style={{ color: "#888780", fontSize: "13px" }}>Loading...</p>;
+  if (loading || !project) {
+    return (
+      <div style={{ height: "120px", background: "#FAF7F0", borderRadius: "8px", animation: "pulse 1.5s ease-in-out infinite" }} />
+    );
+  }
 
   const features: Feature[] = project.features || [];
 
@@ -22,6 +26,12 @@ export default function FeaturesPage() {
 
   return (
     <div>
+      {project.aiGeneratedFields?.includes("features") && (
+        <div style={{ background: "#FFF4E5", border: "0.5px solid #F0997B", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", color: "#993C1D", marginBottom: "1rem" }}>
+          ✨ This content was AI-generated. Review and save to confirm.
+        </div>
+      )}
+
       {features.map((f, i) => (
         <div key={i} style={{ background: "#FAF7F0", border: "0.5px solid #E4DFD2", borderRadius: "8px", padding: "12px", marginBottom: "10px" }}>
           <input
@@ -49,7 +59,11 @@ export default function FeaturesPage() {
       </button>
 
       <div>
-        <button onClick={() => save({ features })} disabled={saving} style={{ padding: "10px 20px", background: "#D85A30", color: "#fff", border: "none", borderRadius: "8px", fontWeight: 500, cursor: "pointer" }}>
+        <button
+          onClick={() => save({ features }, "features")}
+          disabled={saving}
+          style={{ padding: "10px 20px", background: "#D85A30", color: "#fff", border: "none", borderRadius: "8px", fontWeight: 500, cursor: "pointer" }}
+        >
           {saving ? "Saving..." : saved ? "Saved ✓" : "Save changes"}
         </button>
       </div>
