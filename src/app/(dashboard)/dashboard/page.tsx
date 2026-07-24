@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import ProjectCard from "@/components/dashboard/ProjectCard";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -63,31 +64,7 @@ export default async function DashboardPage() {
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
           {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/projects/${project.id}/overview`}
-              style={{ background: "#fff", border: "0.5px solid #E4DFD2", borderRadius: "12px", padding: "16px", textDecoration: "none", display: "block" }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
-                <span style={{ fontWeight: 500, fontSize: "14px", color: "#2C2C2A" }}>{project.name}</span>
-                {project.isFavorite && <span style={{ color: "#EF9F27" }}>★</span>}
-              </div>
-              {project.description && (
-                <p style={{ fontSize: "13px", color: "#888780", margin: "6px 0" }}>
-                  {project.description.slice(0, 80)}
-                </p>
-              )}
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "8px" }}>
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    style={{ fontSize: "11px", background: "#E6F1FB", color: "#0C447C", padding: "2px 8px", borderRadius: "20px" }}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </Link>
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       )}
