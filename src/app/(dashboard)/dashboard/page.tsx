@@ -22,9 +22,9 @@ export default async function DashboardPage() {
     orderBy: { updatedAt: "desc" },
   });
 
-  const favoritesCount = projects.filter((p) => p.isFavorite).length;
+  const favoritesCount = projects.filter((p: any) => p.isFavorite).length;
   const avgHealth = projects.length > 0
-    ? Math.round(projects.reduce((sum, p) => sum + getHealthScore(p).percentage, 0) / projects.length)
+    ? Math.round(projects.reduce((sum: number, p: any) => sum + getHealthScore(p).percentage, 0) / projects.length)
     : 0;
 
   return (
@@ -87,7 +87,7 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px" }}>
-          {projects.map((project) => (
+          {projects.map((project: any) => (
             <ProjectCard key={project.id} project={{ ...project, healthPercentage: getHealthScore(project).percentage }} />
           ))}
         </div>
