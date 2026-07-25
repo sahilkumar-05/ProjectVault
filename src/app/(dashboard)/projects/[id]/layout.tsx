@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import HealthScore from "@/components/project/HealthScore";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import AIGenerator from "@/components/project/AIGenerator";
@@ -24,6 +25,27 @@ export default async function ProjectLayout({
 
   return (
     <div>
+      <Link
+        href="/dashboard"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          fontSize: "13px",
+          fontWeight: 500,
+          color: "#fff",
+          textDecoration: "none",
+          marginBottom: "18px",
+          padding: "7px 14px",
+          background: "#D85A30",
+          border: "0.5px solid #E4DFD2",
+          borderRadius: "8px",
+          boxShadow: "0 1px 3px rgba(44,44,42,0.05)",
+        }}
+      >
+        ← Dashboard
+      </Link>
+
       <div style={{ marginBottom: "16px" }}>
         <h1 style={{ fontSize: "20px", color: "#2C2C2A", marginBottom: "4px" }}>
           {project.name}

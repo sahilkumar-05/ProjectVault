@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import Link from "next/link";
 import { signOut } from "@/lib/auth";
 import SearchBar from "@/components/layout/SearchBar";
 export default async function DashboardLayout({
@@ -54,27 +55,29 @@ export default async function DashboardLayout({
         <form
           action={async () => {
             "use server";
-            await signOut({ redirectTo: "/login" });
+            await signOut({ redirectTo: "/" });
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div
+            <Link
+              href="/settings"
+              title="Profile"
               style={{
-                width: "32px",
-                height: "32px",
+                width: "30px",
+                height: "30px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #F0997B, #D85A30)",
+                background: "#F0997B",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "12px",
-                fontWeight: 600,
-                color: "#fff",
-                boxShadow: "0 2px 8px rgba(216,90,48,0.35)",
+                fontWeight: 500,
+                color: "#4A1B0C",
+                textDecoration: "none",
               }}
             >
               {session?.user?.name?.charAt(0).toUpperCase() || "?"}
-            </div>
+            </Link>
             <button
               type="submit"
               style={{
