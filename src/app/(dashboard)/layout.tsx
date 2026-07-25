@@ -33,7 +33,7 @@ export default async function DashboardLayout({
           gap: "10px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
           <span
             style={{
               fontWeight: 700,
@@ -48,8 +48,7 @@ export default async function DashboardLayout({
           <span style={{ fontWeight: 600, fontSize: "16px", color: "#2C2C2A" }}>
             ProjectVault
           </span>
-        </div>
-
+        </Link>
      <SearchBar />
 
         <form
