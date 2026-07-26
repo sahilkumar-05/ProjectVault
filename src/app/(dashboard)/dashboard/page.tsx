@@ -4,15 +4,6 @@ import Link from "next/link";
 import ProjectCard from "@/components/dashboard/ProjectCard";
 import { getHealthScore } from "@/lib/health-score";
 
-const glassCard: React.CSSProperties = {
-  background: "rgba(255,255,255,0.55)",
-  backdropFilter: "blur(14px)",
-  WebkitBackdropFilter: "blur(14px)",
-  border: "1px solid rgba(255,255,255,0.6)",
-  borderRadius: "16px",
-  boxShadow: "0 4px 24px rgba(44,44,42,0.06)",
-};
-
 export default async function DashboardPage() {
   const session = await auth();
   const userId = session?.user?.id as string;
@@ -23,75 +14,127 @@ export default async function DashboardPage() {
   });
 
   const favoritesCount = projects.filter((p: any) => p.isFavorite).length;
-  const avgHealth = projects.length > 0
-    ? Math.round(projects.reduce((sum: number, p: any) => sum + getHealthScore(p).percentage, 0) / projects.length)
-    : 0;
+  const avgHealth =
+    projects.length > 0
+      ? Math.round(
+          projects.reduce((sum: number, p: any) => sum + getHealthScore(p).percentage, 0) / projects.length
+        )
+      : 0;
+
+  const firstName = session?.user?.name?.split(" ")[0];
 
   return (
-    <div>
-      <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#2C2C2A", marginBottom: "4px", letterSpacing: "-0.3px" }}>
-        Welcome back, {session?.user?.name?.split(" ")[0]}
-      </h1>
-      <p style={{ fontSize: "14px", color: "#888780", marginBottom: "28px" }}>
-        Here's what's in your vault.
-      </p>
+    <div className="relative">
+      <Blob className="right-[-120px] top-[-160px] h-[420px] w-[420px] bg-[#FFE4E1]" duration="8s" />
+      <Blob className="left-[-140px] top-[280px] h-[380px] w-[380px] bg-[#EFEDF4]" duration="9s" delay="1s" />
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "14px", marginBottom: "36px" }}>
-        <div style={{ ...glassCard, padding: "18px" }}>
-          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Total projects</p>
-          <p style={{ fontSize: "28px", fontWeight: 700, color: "#2C2C2A" }}>{projects.length}</p>
-        </div>
-        <div style={{ ...glassCard, padding: "18px" }}>
-          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Avg. documentation health</p>
-          <p style={{
-            fontSize: "28px", fontWeight: 700,
-            background: "linear-gradient(135deg, #D85A30, #F0997B)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          }}>
-            {projects.length > 0 ? `${avgHealth}%` : "—"}
-          </p>
-        </div>
-        <div style={{ ...glassCard, padding: "18px" }}>
-          <p style={{ fontSize: "12px", color: "#888780", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Favorites</p>
-          <p style={{ fontSize: "28px", fontWeight: 700, color: "#EF9F27" }}>{favoritesCount}</p>
-        </div>
-      </div>
+      <div className="relative z-10">
+        <h1 className="mb-1 text-[28px] font-semibold tracking-[-0.02em]">
+          Welcome back,{" "}
+          <span className="font-[Reenie_Beanie] text-4xl font-normal text-[#D85A30]">{firstName}</span>
+        </h1>
+        <p className="mb-7 text-sm text-[#78716C]">Here&apos;s what&apos;s in your vault.</p>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#2C2C2A" }}>Your projects</h2>
-        <Link
-          href="/projects/new"
-          style={{
-            padding: "9px 18px",
-            background: "linear-gradient(135deg, #D85A30, #C4471F)",
-            color: "#fff", borderRadius: "10px", fontSize: "13px", fontWeight: 500,
-            textDecoration: "none", boxShadow: "0 4px 14px rgba(216,90,48,0.3)",
-          }}
-        >
-          + New project
-        </Link>
-      </div>
+        {/* STATS */}
+        <div className="mb-9 grid grid-cols-1 gap-3.5 sm:grid-cols-3">
+          <GlassCard>
+            <p className="mb-1.5 text-xs uppercase tracking-[0.05em] text-[#78716C]">Total projects</p>
+            <p className="text-[28px] font-bold">{projects.length}</p>
+          </GlassCard>
 
-      {projects.length === 0 ? (
-        <div style={{ ...glassCard, border: "1px dashed rgba(180,178,169,0.6)", padding: "56px", textAlign: "center" }}>
-          <p style={{ fontSize: "16px", color: "#2C2C2A", marginBottom: "6px", fontWeight: 500 }}>No projects yet</p>
-          <p style={{ fontSize: "13px", color: "#888780", marginBottom: "18px" }}>
-            Create your first project to start building your developer memory.
-          </p>
+          <GlassCard>
+            <p className="mb-1.5 text-xs uppercase tracking-[0.05em] text-[#78716C]">Avg. documentation health</p>
+            <p className="bg-gradient-to-br from-[#D85A30] to-[#F0997B] bg-clip-text text-[28px] font-bold text-transparent">
+              {projects.length > 0 ? `${avgHealth}%` : "—"}
+            </p>
+          </GlassCard>
+
+          <GlassCard>
+            <p className="mb-1.5 text-xs uppercase tracking-[0.05em] text-[#78716C]">Favorites</p>
+            <p className="text-[28px] font-bold text-[#EF9F27]">{favoritesCount}</p>
+          </GlassCard>
+        </div>
+
+        {/* HEADER ROW */}
+        <div className="mb-3.5 flex items-center justify-between">
+          <h2 className="
+          text-base font-semibold">Your projects</h2>
           <Link
             href="/projects/new"
-            style={{ padding: "10px 20px", background: "linear-gradient(135deg, #D85A30, #C4471F)", color: "#fff", borderRadius: "10px", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}
+            className="rounded-full bg-gradient-to-br from-[#D85A30] to-[#C4471F] px-4.5 py-2.5 text-[13px] font-medium text-white shadow-[0_4px_14px_rgba(216,90,48,0.3)] transition-transform hover:scale-105"
           >
-            Create project
+            + New project
           </Link>
         </div>
-      ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px" }}>
-          {projects.map((project: any) => (
-            <ProjectCard key={project.id} project={{ ...project, healthPercentage: getHealthScore(project).percentage }} />
-          ))}
-        </div>
-      )}
+
+        {/* PROJECTS */}
+        {projects.length === 0 ? (
+          <GlassCard className="border-dashed !border-stone-300 px-14 py-14 text-center">
+            <p className="mb-1.5 text-base font-medium">No projects yet</p>
+            <p className="mb-4.5 text-[13px] text-[#78716C]">
+              Create your first project to start building your developer memory.
+            </p>
+            <Link
+              href="/projects/new"
+              className="inline-block rounded-full bg-gradient-to-br from-[#D85A30] to-[#C4471F] px-5 py-2.5 text-[13px] font-medium text-white transition-transform hover:scale-105"
+            >
+              Create project
+            </Link>
+          </GlassCard>
+        ) : (
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project: any) => (
+              <ProjectCard
+                key={project.id}
+                project={{ ...project, healthPercentage: getHealthScore(project).percentage }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
+  );
+}
+
+function GlassCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div
+      className={`relative overflow-hidden rounded-3xl border border-white/70 p-[18px] backdrop-blur-2xl backdrop-saturate-[1.6] ${className}`}
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0.45) 100%)",
+        boxShadow:
+          "0 8px 32px rgba(44,44,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 0 1px rgba(255,255,255,0.15)",
+      }}
+    >
+      {/* top light-catch line */}
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
+      {/* diagonal mirror sheen */}
+      <span
+        className="pointer-events-none absolute -inset-x-4 -top-1/2 h-[220%] rotate-[-25deg]"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.35) 48%, rgba(255,255,255,0.05) 55%, transparent 70%)",
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+function Blob({
+  className,
+  duration,
+  delay = "0s",
+}: {
+  className: string;
+  duration: string;
+  delay?: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute z-0 rounded-full opacity-50 blur-[70px] ${className}`}
+      style={{ animation: `pv-float ${duration} ease-in-out infinite`, animationDelay: delay }}
+    />
   );
 }

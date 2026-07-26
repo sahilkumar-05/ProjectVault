@@ -71,6 +71,7 @@ export default function NewProjectPage() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
+            required
             style={{ width: "100%", padding: "8px 12px", border: "1px solid #E4DFD2", borderRadius: "8px", fontFamily: "inherit" }}
           />
         </div>
@@ -83,6 +84,7 @@ export default function NewProjectPage() {
             type="text"
             value={techStackInput}
             onChange={(e) => setTechStackInput(e.target.value)}
+            required
             placeholder="Next.js, PostgreSQL, Tailwind"
             style={{ width: "100%", padding: "8px 12px", border: "1px solid #E4DFD2", borderRadius: "8px" }}
           />

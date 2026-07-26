@@ -43,94 +43,96 @@ export default function ProjectCard({ project }: { project: Project }) {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative font-[Outfit]">
       <Link
         href={`/projects/${project.id}/overview`}
+        className="group relative block overflow-hidden rounded-3xl border border-white/70 p-[18px] backdrop-blur-2xl backdrop-saturate-[1.6] transition-all duration-150 hover:-translate-y-0.5"
         style={{
-          background: "rgba(255,255,255,0.55)",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
-          border: "1px solid rgba(255,255,255,0.6)",
-          borderRadius: "16px",
-          padding: "18px",
-          textDecoration: "none",
-          display: "block",
-          boxShadow: "0 4px 24px rgba(44,44,42,0.06)",
-          transition: "transform 0.15s ease, box-shadow 0.15s ease",
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.3) 55%, rgba(255,255,255,0.45) 100%)",
+          boxShadow:
+            "0 8px 32px rgba(44,44,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 0 0 1px rgba(255,255,255,0.15)",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
-          <span style={{ fontWeight: 500, fontSize: "14px", color: "#2C2C2A" }}>
-            {project.name}
-          </span>
-          <div style={{ display: "flex", gap: "8px" }}>
-            <button
-              onClick={toggleFavorite}
-              style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px", color: isFavorite ? "#EF9F27" : "#B4B2A9" }}
-              title="Toggle favorite"
-            >
-              ★
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowConfirm(true);
-              }}
-              style={{ background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: "#B4B2A9" }}
-              title="Delete project"
-            >
-              ✕
-            </button>
+        {/* top light-catch line */}
+        <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" />
+        {/* diagonal mirror sheen */}
+        <span
+          className="pointer-events-none absolute -inset-x-4 -top-1/2 h-[220%] rotate-[-25deg] transition-opacity duration-300 group-hover:opacity-80"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.35) 48%, rgba(255,255,255,0.05) 55%, transparent 70%)",
+          }}
+        />
+
+        <div className="relative z-10">
+          <div className="flex items-start justify-between">
+            <span className="text-sm font-medium text-[#292524]">{project.name}</span>
+            <div className="flex gap-2">
+              <button
+                onClick={toggleFavorite}
+                title="Toggle favorite"
+                className="text-sm transition-transform hover:scale-110"
+                style={{ color: isFavorite ? "#EF9F27" : "#B4B2A9" }}
+              >
+                ★
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowConfirm(true);
+                }}
+                title="Delete project"
+                className="text-[13px] text-[#B4B2A9] transition-colors hover:text-[#D85A30]"
+              >
+                ✕
+              </button>
+            </div>
           </div>
-        </div>
 
-        {project.description && (
-          <p style={{ fontSize: "13px", color: "#888780", margin: "6px 0" }}>
-            {project.description.slice(0, 80)}
-          </p>
-        )}
+          {project.description && (
+            <p className="my-1.5 text-[13px] text-[#78716C]">{project.description.slice(0, 80)}</p>
+          )}
 
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "8px" }}>
-          {project.techStack.map((tech) => (
-            <span
-              key={tech}
-              style={{ fontSize: "11px", background: "#E6F1FB", color: "#0C447C", padding: "2px 8px", borderRadius: "20px" }}
-            >
-              {tech}
-            </span>
-          ))}
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full bg-[#EFEDF4] px-2 py-0.5 text-[11px] text-[#5B5578]"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-[#EEEDFE]">
+            <div
+              className="h-full bg-gradient-to-r from-[#D85A30] to-[#F0997B]"
+              style={{ width: `${project.healthPercentage}%` }}
+            />
+          </div>
+          <p className="mt-1 text-[11px] text-[#78716C]">{project.healthPercentage}% documented</p>
         </div>
-        <div style={{ height: "4px", background: "#EEEDFE", borderRadius: "2px", overflow: "hidden", marginTop: "10px" }}>
-          <div style={{ width: `${project.healthPercentage}%`, height: "100%", background: "linear-gradient(90deg, #D85A30, #F0997B)" }} />
-        </div>
-        <p style={{ fontSize: "11px", color: "#888780", marginTop: "4px" }}>{project.healthPercentage}% documented</p>
       </Link>
 
       {showConfirm && (
         <div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-2.5 rounded-3xl border border-white/70 p-4 backdrop-blur-2xl backdrop-saturate-[1.6]"
           style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(255,255,255,0.97)",
-            borderRadius: "12px",
-            border: "0.5px solid #E4DFD2",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-            padding: "16px",
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.85) 100%)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9)",
           }}
         >
-          <p style={{ fontSize: "13px", color: "#2C2C2A", textAlign: "center" }}>
-            Delete "{project.name}"? This can't be undone.
+          <p className="text-center text-[13px] text-[#292524]">
+            Delete &quot;{project.name}&quot;? This can&apos;t be undone.
           </p>
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div className="flex gap-2">
             <button
               onClick={handleDelete}
               disabled={deleting}
-              style={{ padding: "6px 14px", background: "#993C1D", color: "#fff", border: "none", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
+              className="rounded-full bg-[#993C1D] px-3.5 py-1.5 text-xs text-white transition-transform hover:scale-105 disabled:opacity-70"
             >
               {deleting ? "Deleting..." : "Delete"}
             </button>
@@ -140,7 +142,7 @@ export default function ProjectCard({ project }: { project: Project }) {
                 e.stopPropagation();
                 setShowConfirm(false);
               }}
-              style={{ padding: "6px 14px", background: "#E4DFD2", color: "#2C2C2A", border: "none", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
+              className="rounded-full bg-stone-100 px-3.5 py-1.5 text-xs text-[#292524] transition-transform hover:scale-105"
             >
               Cancel
             </button>

@@ -24,52 +24,48 @@ export default async function ProjectLayout({
   }
 
   return (
-    <div>
-      <Link
-        href="/dashboard"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
-          fontSize: "13px",
-          fontWeight: 500,
-          color: "#fff",
-          textDecoration: "none",
-          marginBottom: "18px",
-          padding: "7px 14px",
-          background: "#D85A30",
-          border: "0.5px solid #E4DFD2",
-          borderRadius: "8px",
-          boxShadow: "0 1px 3px rgba(44,44,42,0.05)",
-        }}
-      >
-        ← Dashboard
-      </Link>
+    <div className="relative">
+      <Blob className="right-[-140px] top-[-160px] h-[380px] w-[380px] bg-[#E8EFE8]" duration="8s" />
 
-      <div style={{ marginBottom: "16px" }}>
-        <h1 style={{ fontSize: "20px", color: "#2C2C2A", marginBottom: "4px" }}>
-          {project.name}
-        </h1>
-        {project.description && (
-          <p style={{ fontSize: "13px", color: "#888780" }}>{project.description}</p>
-        )}
-      </div>
+      <div className="relative z-10">
+        <Link
+          href="/dashboard"
+          className="mb-4.5 inline-flex items-center gap-1.5 rounded-lg bg-[#D85A30] px-3.5 py-1.5 text-[13px] font-medium text-white shadow-[0_1px_3px_rgba(44,44,42,0.05)] transition-transform hover:scale-105"
+        >
+          ← Dashboard
+        </Link>
+
+        <div className="mb-4">
+          <h1 className="mb-1 text-xl font-semibold tracking-[-0.01em]">{project.name}</h1>
+          {project.description && <p className="text-[13px] text-[#78716C]">{project.description}</p>}
+        </div>
+
         <HealthScore project={project} />
-      <AIGenerator project={project} />
+        <AIGenerator project={project} />
 
-      <ProjectTabs projectId={id} />
+        <ProjectTabs projectId={id} />
 
-      <div
-        style={{
-          background: "#fff",
-          border: "0.5px solid #E4DFD2",
-          borderTop: "none",
-          borderRadius: "0 8px 8px 8px",
-          padding: "24px",
-        }}
-      >
-        {children}
+        <div className="rounded-b-3xl rounded-tr-3xl border border-white/60 bg-white/70 p-6 shadow-[0_4px_24px_rgba(44,44,42,0.06)] backdrop-blur-[14px]">
+          {children}
+        </div>
       </div>
     </div>
+  );
+}
+
+function Blob({
+  className,
+  duration,
+  delay = "0s",
+}: {
+  className: string;
+  duration: string;
+  delay?: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute z-0 rounded-full opacity-50 blur-[70px] ${className}`}
+      style={{ animation: `pv-float ${duration} ease-in-out infinite`, animationDelay: delay }}
+    />
   );
 }
